@@ -26,7 +26,7 @@ fn test_generic_struct() {
             /**
              * Comment for GenericStruct
              */
-            export interface GenericStruct<A, B, D> {
+            export interface GenericStruct<A, B, _C, D> {
                 /**
                  * Comment for a
                  */
@@ -67,7 +67,7 @@ fn test_generic_struct() {
             /**
              * Comment for GenericTuple
              */
-            export type GenericTuple<A, C, D> = [A, C, D];"
+            export type GenericTuple<A, _B, C, D> = [A, C, D];"
         ,}
     );
 }

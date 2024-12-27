@@ -60,12 +60,27 @@ impl<'a> Parser<'a> {
     }
 
     fn create_relevant_type_params(&self, type_ref_names: HashSet<&String>) -> Vec<String> {
-        self.container
-            .generics()
-            .type_params()
-            .map(|p| p.ident.to_string())
-            .filter(|t| type_ref_names.contains(t))
-            .collect()
+        if let Data::Enum(_) = self.container.serde_data() {
+            self.container
+                .generics()
+                .type_params()
+                .map(|p| p.ident.to_string())
+                .filter(|t| type_ref_names.contains(t))
+                .collect()
+        } else {
+            self.container
+                .generics()
+                .type_params()
+                .map(|p| p.ident.to_string())
+                .map(|t| {
+                    if type_ref_names.contains(&t) {
+                        t
+                    } else {
+                        format!("_{t}")
+                    }
+                })
+                .collect()
+        }
     }
 
     fn create_type_alias_decl(&self, type_ann: TsType) -> Decl {
